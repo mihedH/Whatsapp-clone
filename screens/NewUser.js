@@ -11,7 +11,7 @@ export default function NewUser(props) {
   let email, pwd;
 
   return (
-    <ImageBackground source={require('../assets/background.jpg')} style={styles.container}>
+    <ImageBackground source={require('../assets/sea.jpg')} style={styles.container}>
       <View style={styles.container2}>
         <Text style={styles.headerText}>Create account</Text>
         
@@ -39,7 +39,7 @@ export default function NewUser(props) {
         <View style={styles.buttonContainer}>
           <Button 
             title="Submit" 
-            color="#87A878" 
+            color="#007fad" 
             onPress={() => {
               createUserWithEmailAndPassword(auth,email, pwd)
                 .then(() => {
@@ -76,18 +76,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   container2: {
-    backgroundColor: "#212738",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 350,
+    backgroundColor: 'rgba(187,226,237,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 400,
     width: '80%',
     borderRadius: 15,
-  },
+    boxShadow: '0 7px 10px rgba(0, 0, 0, 0.3)',
+},
   headerText: {
     fontSize: 34,
     fontWeight: "bold",
     fontStyle: "italic",
-    color: "#b7d2e7",
+    color: "#007fad",
     marginBottom: 9,
   },
   textInputStyle: {

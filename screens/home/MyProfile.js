@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BackHandler, Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableHighlight } from "react-native";
+import { BackHandler, Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { app, supabase } from "../../config";
 import { getDatabase, get, ref, set, child, serverTimestamp } from "firebase/database";  // Firebase v9+ imports
 import { getAuth, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";  // Ensure Firebase initialization
+import { LinearGradient } from "expo-linear-gradient";
 
 const database = getDatabase(app);
 const auth = getAuth(app);
@@ -126,8 +127,11 @@ export default function MyProfile(props) {
 
 
   return (
-    <ImageBackground source={require("../../assets/imgbleu.jpg")} style={styles.container}>
-      <Text style={styles.textstyle}>My Account</Text>
+    <LinearGradient
+      colors={["#74a4b8", "#e4f7f1"]}
+      style={styles.container}
+    >   
+    <Text style={styles.textstyle}>My Account</Text>
       <TouchableHighlight onPress={pickImage}>
         <Image
           source={isDefaultImage ? require("../../assets/profil.png") : { uri: uriLocalImage }}
@@ -135,6 +139,7 @@ export default function MyProfile(props) {
             height: 200,
             width: 200,
             borderRadius: 100,
+            marginBottom: 10,
           }}
         />
       </TouchableHighlight>
@@ -173,15 +178,17 @@ export default function MyProfile(props) {
         placeholder="Numero"
         style={styles.textinputstyle}
       />
+      <View style={styles.buttonContainer}>
       <TouchableHighlight
         onPress={saveProfile}
         activeOpacity={0.5}
         underlayColor="#DDDDDD"
         style={{
           marginBottom: 10,
-          borderColor: "#00f",
-          borderWidth: 2,
-          backgroundColor: "#08f6",
+          borderColor: "#3f5779",
+          borderWidth:1,
+          backgroundColor: "#74a4b8",
+          boxShadow: '0 5px 10px rgba(0, 0, 0, 0.3)',
           textstyle: "italic",
           fontSize: 24,
           height: 60,
@@ -202,16 +209,17 @@ export default function MyProfile(props) {
       >
         <Text style={{ color: "#FFF", fontSize: 24 }}>Disconnect</Text>
       </TouchableHighlight>
-    </ImageBackground>
+      </View>
+      </LinearGradient>   
   );
 }
 
 const styles = StyleSheet.create({
   textinputstyle: {
     fontWeight: "bold",
-    backgroundColor: "#0004",
+    backgroundColor: "#f9f9f9",
     fontSize: 20,
-    color: "#fff",
+    color: "#000",
     width: "75%",
     height: 50,
     borderRadius: 10,
@@ -220,8 +228,9 @@ const styles = StyleSheet.create({
   textstyle: {
     fontSize: 40,
     fontFamily: "serif",
-    color: "#07f",
+    color: "#f4f0e7",
     fontWeight: "bold",
+    marginBottom:15,
   },
   container: {
     color: "blue",
@@ -232,9 +241,12 @@ const styles = StyleSheet.create({
   },
   disconnectButton: {
     marginBottom: 10,
-    borderColor: "#f00",
+    borderColor: "#bb0a21",
     borderWidth: 2,
-    backgroundColor: "#f08",
+    backgroundColor: "#bb0a21",
+    boxShadow: '0 5px 10px rgba(0, 0, 0, 0.3)',
+    textstyle: "italic",
+    fontSize: 24,
     height: 60,
     width: "50%",
     justifyContent: "center",
@@ -242,4 +254,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 5,
+    marginTop: 20,
+    width: "75%",
+},
 });

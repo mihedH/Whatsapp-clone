@@ -1,6 +1,6 @@
 // auth.js
 import React, { useState } from 'react';
-import { BackHandler, Button, ImageBackground, StatusBar, StyleSheet, Text, TextInput, View, Alert } from 'react-native';
+import { BackHandler, Button, ImageBackground, StatusBar, StyleSheet, Text, TextInput, View, Alert, Image } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { getDatabase, ref, set, onDisconnect, serverTimestamp } from 'firebase/database';
 import { app } from '../config'; // Import the initialized Firebase app
@@ -33,9 +33,9 @@ export default function Auth(props) {
     };
 
     return (
-        <ImageBackground source={require('../assets/background.jpg')} style={styles.container}>
+        <ImageBackground source={require('../assets/sea.jpg')} style={styles.container}>
             <View style={styles.container2}>
-                <Text style={styles.headerText}>Bienvenue</Text>
+                <Image source={require('../assets/Welcome.png')} style={{ width: 150, height: 150 }} />
                 <TextInput
                     style={styles.textInputStyle}
                     keyboardType="email-address"
@@ -52,6 +52,7 @@ export default function Auth(props) {
                 />
                 <View style={styles.buttonContainer}>
                     <Button
+                    color='#007fad'
                         onPress={() => {
                             signInWithEmailAndPassword(auth, email, pwd)
                                 .then(() => {
@@ -94,12 +95,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     container2: {
-        backgroundColor: '#212738',
+        backgroundColor: 'rgba(187,226,237,0.5)',
         alignItems: 'center',
         justifyContent: 'center',
-        height: 350,
+        height: 400,
         width: '80%',
         borderRadius: 15,
+        boxShadow: '0 7px 10px rgba(0, 0, 0, 0.3)',
     },
     headerText: {
         fontSize: 34,

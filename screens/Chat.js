@@ -11,6 +11,7 @@ import {
   Platform,
   Linking,
   Image,
+  ImageBackground,
 } from "react-native";
 import { app, supabase } from '../config';
 import { getDatabase, ref, push, set, onValue, child } from 'firebase/database';
@@ -245,11 +246,22 @@ export default function Chat(props) {
           }
           style={styles.profileImage}
         />
+         <View style={styles.nameAndDotContainer}>
+        <View style={styles.textContainer}>
         <Text style={styles.headerText}>
-          {profile.pseudo} {profile.nom}
+           {profile.nom}
         </Text>
+                  <Text style={styles.contactPseudo}>{profile.pseudo}</Text>
+                </View>
+          {/* Green Dot for online status */}
+          {profile.isOnline && (
+                  <View style={styles.onlineDot}></View>
+                )}  
+                </View>
       </View>
+
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.flexGrow}>
+      <ImageBackground source={require('../assets/coc.jpg')} style={styles.container}>
         <FlatList
           data={messages}
           renderItem={renderMessage}
@@ -267,15 +279,16 @@ export default function Chat(props) {
             onChangeText={handleInputChange}
           />
           <TouchableOpacity onPress={sendLocation} style={styles.iconButton}>
-            <MaterialCommunityIcons name="map-marker" size={30} color="#0F52BA" />
+            <MaterialCommunityIcons name="map-marker" size={30} color="#3f5779" />
           </TouchableOpacity>
           <TouchableOpacity onPress={sendFile} style={styles.iconButton}>
-            <MaterialCommunityIcons name="file" size={30} color="#0F52BA" />
+            <MaterialCommunityIcons name="file" size={30} color="#3f5779" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
             <Text style={styles.sendButtonText}>Send</Text>
           </TouchableOpacity>
         </View>
+        </ImageBackground>
       </KeyboardAvoidingView>
     </View>
   );
@@ -301,7 +314,7 @@ const styles = StyleSheet.create({
   },
   myMessage: {
     alignSelf: "flex-end",
-    backgroundColor: "#0F52BA",
+    backgroundColor: "#74a4b8",
   },
   otherMessage: {
     alignSelf: "flex-start",
@@ -345,7 +358,7 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     marginLeft: 10,
-    backgroundColor: "#0F52BA",
+    backgroundColor: "#3f5779",
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -358,18 +371,40 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 15,
-    backgroundColor: "#0F52BA",
+    backgroundColor: "#3f5779",
   },
   headerText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
+    marginRight: 12,
+  },
+  contactPseudo: {
+    fontSize: 14,
+    color: "#95a5af",
+    marginTop: 2,
+    marginLeft: 10,
   },
   profileImage: {
     width: 50,
     height: 50,
     borderRadius: 25,
+    marginRight: 10, 
+  },
+  onlineDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5, // Makes the dot circular
+    backgroundColor: 'green',
+    marginTop:10,
+  },
+  nameAndDotContainer: {
+    flexDirection: 'row', // Align the name and dot horizontally
+    alignItems: 'flex-start', // Vertically center the name and dot
+  },
+  textContainer: {
+    marginRight: 5,
   },
 });
 

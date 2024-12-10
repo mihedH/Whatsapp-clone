@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, ImageBackg
 import { app } from '../../config'; 
 import { getDatabase, ref, onValue, get, serverTimestamp } from 'firebase/database';
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { LinearGradient } from "expo-linear-gradient";
 
 // Get database instance
 const database = getDatabase(app);
@@ -28,14 +29,16 @@ export default function ListProfile(props) {
               const status = statusSnapshot.val();
               user.isOnline = status && status.state === "online"; // Check if user is online
               profiles.push(user); // Add profile with online status
-              setData((prevData) => [...prevData, user]); // Update state with new data
-            });
+              // Only update state after collecting all profiles
+              if (profiles.length === snapshot.size - 1) { 
+               setData(profiles); // Set the state with all profiles at once
+}            });
           } else {
             setCurrentUser(unProfil.val());
           }
         });
       } catch (error) {
-        console.error('Error fetching profiles:', error);
+        console.error('Error fetching profiles :', error);
       }
     };
 
@@ -47,9 +50,13 @@ export default function ListProfile(props) {
   }, [currentId]);
 
   return (
-    <ImageBackground source={require("../../assets/imgbleu.jpg")} style={styles.container}>
-      <Text style={styles.textstyle}>List Profils</Text>
+    <LinearGradient
+      colors={["#74a4b8", "#e4f7f1"]}
+      style={styles.container}
+    >
+          <Text style={styles.textstyle}>List Profils</Text>
       <FlatList
+      keyExtractor={(item) => item.id}
         data={data}
         renderItem={({ item }) => {
           return (
@@ -86,7 +93,7 @@ export default function ListProfile(props) {
         }}
         style={styles.listContainer}
       ></FlatList>
-    </ImageBackground>
+    </LinearGradient>
   );
 }
 
@@ -100,25 +107,23 @@ const styles = StyleSheet.create({
   textstyle: {
     fontSize: 40,
     fontFamily: "serif",
-    color: "#07f",
+    color: "#f4f0e7",
     fontWeight: "bold",
+    marginBottom: 20,
+    marginTop: 20,
   },
   listContainer: {
     width: "100%",
-    padding: 10,
+    // padding: 10,
   },
   contactContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f8f8f8",
-    marginBottom: 12,
-    borderRadius: 12,
-    padding: 14,
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    backgroundColor: "rgba(248, 248, 248, 0.3)",
+    marginBottom: 1,
+    borderRadius: 8,
+    padding: 12,
+
   },
   contactInner: {
     flexDirection: "row",
@@ -146,7 +151,7 @@ const styles = StyleSheet.create({
   },
   contactPseudo: {
     fontSize: 14,
-    color: "#95a5a6",
+    color: "#95a5af",
     marginTop: 2,
   },
   onlineDot: {
