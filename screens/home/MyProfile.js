@@ -3,9 +3,11 @@ import { BackHandler, Alert, Image, ImageBackground, StyleSheet, Text, TextInput
 import * as ImagePicker from "expo-image-picker";
 import { app, supabase } from "../../config";
 import { getDatabase, get, ref, set, child, serverTimestamp } from "firebase/database";  // Firebase v9+ imports
+import { getAuth, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";  // Ensure Firebase initialization
 
 const database = getDatabase(app);
+const auth = getAuth(app);
 
 export default function MyProfile(props) {
   const currentId = props.route.params.currentId;
@@ -52,6 +54,16 @@ export default function MyProfile(props) {
 
     return () => backHandler.remove();
   }, [cameFromNewUser, isSaved, currentId]);
+
+  const disconnect = () => {
+    signOut(auth)
+      .then(() => {
+        props.navigation.navigate("Auth");
+      })
+      .catch((error) => {
+        alert("Error signing out: " + error.message);
+      });
+  };
 
   const uploadImageToStorage = async (uriLocal) => {
     const response = await fetch(uriLocal);
@@ -182,6 +194,14 @@ export default function MyProfile(props) {
       >
         <Text style={{ color: "#FFF", fontSize: 24 }}>Save</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={disconnect}
+        activeOpacity={0.5}
+        underlayColor="#DDDDDD"
+        style={styles.disconnectButton}
+      >
+        <Text style={{ color: "#FFF", fontSize: 24 }}>Disconnect</Text>
+      </TouchableHighlight>
     </ImageBackground>
   );
 }
@@ -209,5 +229,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  disconnectButton: {
+    marginBottom: 10,
+    borderColor: "#f00",
+    borderWidth: 2,
+    backgroundColor: "#f08",
+    height: 60,
+    width: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    marginTop: 20,
   },
 });
