@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Linking,
+  Image,
 } from "react-native";
 import { app, supabase } from '../config';
 import { getDatabase, ref, push, set, onValue, child } from 'firebase/database';
@@ -235,6 +236,19 @@ export default function Chat(props) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Image
+          source={
+            profile.urlImage
+              ? { uri: profile.urlImage }
+              : require("../assets/profil.png")
+          }
+          style={styles.profileImage}
+        />
+        <Text style={styles.headerText}>
+          {profile.pseudo} {profile.nom}
+        </Text>
+      </View>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.flexGrow}>
         <FlatList
           data={messages}
@@ -339,6 +353,23 @@ const styles = StyleSheet.create({
   sendButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    backgroundColor: "#0F52BA",
+  },
+  headerText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
 });
 

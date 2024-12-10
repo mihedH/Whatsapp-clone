@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, ImageBackground, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native';
-import { getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { app } from '../config'; // Import the initialized Firebase app
 
 
@@ -41,7 +41,7 @@ export default function NewUser(props) {
             title="Submit" 
             color="#87A878" 
             onPress={() => {
-              auth.createUserWithEmailAndPassword(email, pwd)
+              createUserWithEmailAndPassword(auth,email, pwd)
                 .then(() => {
                   const currentId = auth.currentUser.uid;
                   // Navigate to MyProfile with cameFromNewUser flag

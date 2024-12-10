@@ -59,7 +59,7 @@ export default function ListProfile(props) {
               }}
               underlayColor="#ddd"
               style={styles.contactContainer}
-              key={item.id}
+              // key={item.id}
             >
               <View style={styles.contactInner}>
                 {/* Profile Image */}
