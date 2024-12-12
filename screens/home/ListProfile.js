@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, ImageBackground } from "react-native";
+import { View, Text, FlatList, Image, TouchableHighlight, StyleSheet, ImageBackground, BackHandler, Alert } from "react-native";
 import { app } from '../../config'; 
 import { getDatabase, ref, onValue, get, serverTimestamp } from 'firebase/database';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFocusEffect } from "@react-navigation/native";
 
 // Get database instance
 const database = getDatabase(app);
@@ -13,6 +14,30 @@ export default function ListProfile(props) {
   const currentId = props.route.params.currentId;
   const [data, setData] = useState([]);
   const [currentUser, setCurrentUser] = useState(currentId);
+
+    // Use `useFocusEffect` to add the back handler only when this page is in focus
+    useFocusEffect(
+      React.useCallback(() => {
+        const backAction = () => {
+          Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+            {
+              text: "Cancel",
+              onPress: () => null,
+              style: "cancel",
+            },
+            { text: "YES", onPress: () => BackHandler.exitApp() },
+          ]);
+          return true;
+        };
+  
+        const backHandler = BackHandler.addEventListener(
+          "hardwareBackPress",
+          backAction
+        );
+  
+        return () => backHandler.remove(); // Cleanup the event listener when focus is lost
+      }, [])
+    );
 
   useEffect(() => {
     // Fetch user profiles and their online status

@@ -57,7 +57,17 @@ export default function MyProfile(props) {
   }, [cameFromNewUser, isSaved, currentId]);
 
   const disconnect = () => {
-    signOut(auth)
+    const userStatusDatabaseRef = ref(database, `/status/${auth.currentUser.uid}`);
+  
+    // Update the user status to offline
+    set(userStatusDatabaseRef, {
+      state: "offline",
+      last_changed: serverTimestamp(),
+    })
+      .then(() => {
+        // Sign out the user and navigate to the Auth page
+        return signOut(auth);
+      })
       .then(() => {
         props.navigation.navigate("Auth");
       })
@@ -65,6 +75,7 @@ export default function MyProfile(props) {
         alert("Error signing out: " + error.message);
       });
   };
+  
 
   const uploadImageToStorage = async (uriLocal) => {
     const response = await fetch(uriLocal);
@@ -150,7 +161,7 @@ export default function MyProfile(props) {
           setIsSaved(false); // Mark as unsaved when any field changes
         }}
         textAlign="center"
-        placeholderTextColor="#fff"
+        placeholderTextColor="#95a5af"
         placeholder="Nom"
         keyboardType="default"
         style={styles.textinputstyle}
@@ -162,7 +173,7 @@ export default function MyProfile(props) {
           setIsSaved(false); // Mark as unsaved when any field changes
         }}
         textAlign="center"
-        placeholderTextColor="#fff"
+        placeholderTextColor="#95a5af"
         placeholder="Pseudo"
         keyboardType="default"
         style={styles.textinputstyle}
@@ -173,7 +184,7 @@ export default function MyProfile(props) {
           setTelephone(text);
           setIsSaved(false); // Mark as unsaved when any field changes
         }}
-        placeholderTextColor="#fff"
+        placeholderTextColor="#95a5af"
         textAlign="center"
         placeholder="Numero"
         style={styles.textinputstyle}

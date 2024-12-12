@@ -51,6 +51,7 @@ export default function Home(props) {
       <Tab.Screen
         name="Group"
         component={Group}
+        initialParams={{ currentId: currentId }}
         listeners={{
           tabPress: e => {
             const cameFromNewUser = props.route.params.cameFromNewUser;

@@ -159,20 +159,17 @@ export default function Chat(props) {
       await supabase.storage.from("WhatsappCloneStorage").upload(currentId, arraybuffer, {
         upsert: true,
       });
-  
+   // Upload the image and get the public URL
       const { data } = supabase.storage.from("WhatsappCloneStorage").getPublicUrl(currentId);
       const publicImageUrl = data.publicUrl;
 
-  
-      // Upload the image and get the public URL
-  
       // Log the public URL
       console.log("Public Image URL:", publicImageUrl);
   
       // Create the message with the public URL
       const message = {
         id: Date.now().toString(),
-        text: "Shared Image",  // You can modify this as needed
+        text: "Shared Image",
         sender: currentId,
         date: new Date().toISOString(),
         receiver: profile.id,
